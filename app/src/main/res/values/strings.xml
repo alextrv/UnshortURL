@@ -1,3 +1,17 @@
 <resources>
     <string name="app_name">UnshortURL</string>
+
+    <string name="url_copied">URL copied to clipboard</string>
+    <string name="long_url">Long URL</string>
+    <string name="copy">Copy</string>
+    <string name="paste">Paste</string>
+    <string name="open">Open</string>
+    <string name="not_short_url">This is not short URL</string>
+
+    <string name="main">Main</string>
+    <string name="history">History</string>
+
+    <string name="enter_short_url">Enter short URL</string>
+    <string name="get_deep_url">Get deep long URL</string>
+    <string name="go">Go</string>
 </resources>

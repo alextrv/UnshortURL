@@ -51,7 +51,6 @@ public class HistoryBaseLab {
      */
     private ContentValues getContentValues(HistoryURL historyURL) {
         ContentValues contentValues = new ContentValues();
-        contentValues.put(HistoryTable.Cols.ID, historyURL.getId());
         contentValues.put(HistoryTable.Cols.URL, historyURL.getUrl());
         contentValues.put(HistoryTable.Cols.PARENT_ID, historyURL.getParentId());
 
@@ -115,7 +114,7 @@ public class HistoryBaseLab {
      * @param id the row id in database.
      * @return {@code HistoryURL} item from database or {@code null} if not found.
      */
-    public HistoryURL getItem(int id) {
+    public HistoryURL getItem(long id) {
         HistoryDbCursorWrapper cursorWrapper = queryDb(
                 HistoryTable.Cols.ID + " = ?",
                 new String[]{ String.valueOf(id) },
@@ -136,12 +135,38 @@ public class HistoryBaseLab {
     }
 
     /**
+     * Gets {@code HistoryURL} item from database according to {@code parentId} params.
+     * @param parentId the parent_id in database.
+     * @return {@code HistoryURL} item from database or {@code null} if not found.
+     */
+    public HistoryURL getChildItem(long parentId) {
+        HistoryDbCursorWrapper cursorWrapper = queryDb(
+                HistoryTable.Cols.PARENT_ID + " = ?",
+                new String[]{ String.valueOf(parentId) },
+                null,
+                HistoryTable.NAME
+        );
+
+        try {
+            if (cursorWrapper.getCount() == 0) {
+                return null;
+            }
+            cursorWrapper.moveToFirst();
+            return cursorWrapper.getHistoryURL();
+        } finally {
+            cursorWrapper.close();
+        }
+
+    }
+
+    /**
      * Inserts into database @{code historyURL} from params.
      * @param historyURL inserts into DB.
+     * @return the row ID of the newly inserted row, or -1 if an error occurred
      */
-    public void addItem(HistoryURL historyURL) {
+    public long addItem(HistoryURL historyURL) {
         ContentValues contentValues = getContentValues(historyURL);
-        mDatabase.insert(HistoryTable.NAME, null, contentValues);
+        return mDatabase.insert(HistoryTable.NAME, null, contentValues);
     }
 
     /**
@@ -167,7 +192,7 @@ public class HistoryBaseLab {
      * Deletes record in database with the following id.
      * @param id of record which needs to delete in database.
      */
-    public void deleteItem(int id) {
+    public void deleteItem(long id) {
         mDatabase.delete(
                 HistoryTable.NAME,
                 HistoryTable.Cols.ID + " = ?",

@@ -6,17 +6,17 @@ package org.alex.unshorturl;
  */
 public class HistoryURL {
 
-    private final int mId;
+    private final long mId;
     private final String mUrl;
-    private final int mParentId;
+    private final long mParentId;
 
-    public HistoryURL(int id, String url, int parentId) {
+    public HistoryURL(long id, String url, long parentId) {
         mId = id;
         mUrl = url;
         mParentId = parentId;
     }
 
-    public int getId() {
+    public long getId() {
         return mId;
     }
 
@@ -24,7 +24,7 @@ public class HistoryURL {
         return mUrl;
     }
 
-    public int getParentId() {
+    public long getParentId() {
         return mParentId;
     }
 }

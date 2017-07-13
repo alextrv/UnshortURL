@@ -136,6 +136,12 @@ public class MainFragment extends Fragment {
                 } else {
                     urls = ResolveShortURL.getOneLevelLongURL(url);
                 }
+                if (urls != null && urls.size() > 0) {
+                    long parentId = HistoryBaseLab.get(getContext()).addItem(new HistoryURL(0, url, 0));
+                    for (String longUrl : urls) {
+                        parentId = HistoryBaseLab.get(getContext()).addItem(new HistoryURL(0, longUrl, parentId));
+                    }
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }

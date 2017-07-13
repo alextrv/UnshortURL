@@ -22,9 +22,9 @@ public class HistoryDbCursorWrapper extends CursorWrapper {
      * @return the {@code HistoryURL}.
      */
     public HistoryURL getHistoryURL() {
-        int id = getInt(getColumnIndex(HistoryTable.Cols.ID));
+        long id = getLong(getColumnIndex(HistoryTable.Cols.ID));
         String url = getString(getColumnIndex(HistoryTable.Cols.URL));
-        int parentID = getInt(getColumnIndex(HistoryTable.Cols.PARENT_ID));
+        long parentID = getLong(getColumnIndex(HistoryTable.Cols.PARENT_ID));
 
         return new HistoryURL(id, url, parentID);
     }

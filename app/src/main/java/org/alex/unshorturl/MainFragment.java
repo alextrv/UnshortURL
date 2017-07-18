@@ -165,6 +165,7 @@ public class MainFragment extends Fragment {
             if (result == null || result.size() == 0) {
                 Toast.makeText(getActivity(), R.string.not_short_url, Toast.LENGTH_SHORT).show();
             }
+            ((MainActivity) getActivity()).getViewPager().getAdapter().notifyDataSetChanged();
             updateURLsUI(result);
         }
     }

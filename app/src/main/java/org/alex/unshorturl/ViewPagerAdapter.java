@@ -30,6 +30,15 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
         return mContainerList.get(position).getTitle();
     }
 
+    @Override
+    public int getItemPosition(Object object) {
+        Fragment fragment = (Fragment) object;
+        if (fragment instanceof HistoryFragment) {
+            ((HistoryFragment) fragment).updateUI();
+        }
+        return super.getItemPosition(object);
+    }
+
     /**
      * Add fragment and title to {@code mContainerList}.
      * @param fragment the fragment

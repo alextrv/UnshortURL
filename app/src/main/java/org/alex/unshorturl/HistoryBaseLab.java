@@ -200,4 +200,14 @@ public class HistoryBaseLab {
         );
     }
 
+    /**
+     * Deletes all records in database.
+     */
+    public void deleteAllItems() {
+        mDatabase.delete(
+                HistoryTable.NAME,
+                null,
+                null
+        );
+    }
 }

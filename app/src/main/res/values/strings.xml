@@ -14,4 +14,8 @@
     <string name="enter_short_url">Enter short URL</string>
     <string name="get_deep_url">Get deep long URL</string>
     <string name="go">Go</string>
+
+    <string name="clear_all_history">Clear all history</string>
+
+    <string name="are_you_sure_clear_history">Are you sure you want to clear all history?</string>
 </resources>

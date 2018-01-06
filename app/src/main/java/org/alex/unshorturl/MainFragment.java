@@ -12,6 +12,8 @@ import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +23,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.webkit.URLUtil;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,7 +35,7 @@ public class MainFragment extends Fragment {
     private TextInputEditText mURLEditText;
     private Button mGetLongURLButton;
     private Button mGetDeepLongURLButton;
-    private Button mPasteFromClipboardButton;
+    private ImageButton mClearPasteFromClipboardButton;
 
     private RecyclerView mRecyclerView;
     private MainRecyclerView.ListAdapter mAdapter;
@@ -50,9 +53,7 @@ public class MainFragment extends Fragment {
         mRecyclerView = (RecyclerView) view.findViewById(R.id.urls_list_recycler_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        mPasteFromClipboardButton = (Button) view.findViewById(R.id.paste_url_button);
-
-        mURLEditText.setText(getURLFromIntent(getActivity().getIntent()));
+        mClearPasteFromClipboardButton = (ImageButton) view.findViewById(R.id.clear_paste_url_button);
 
         mURLEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -64,6 +65,29 @@ public class MainFragment extends Fragment {
                 return false;
             }
         });
+
+        mURLEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (s.length() == 0) {
+                    mClearPasteFromClipboardButton
+                            .setImageResource(R.drawable.ic_content_paste_black_24dp);
+                } else {
+                    mClearPasteFromClipboardButton
+                            .setImageResource(R.drawable.ic_clear_black_24dp);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+
+        mURLEditText.setText(getURLFromIntent(getActivity().getIntent()));
 
         mGetLongURLButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,15 +103,18 @@ public class MainFragment extends Fragment {
             }
         });
 
-        mPasteFromClipboardButton.setOnClickListener(new View.OnClickListener() {
+        mClearPasteFromClipboardButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ClipboardManager clipboardManager =
-                        (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
-                ClipData primaryClip = clipboardManager.getPrimaryClip();
-                if (primaryClip != null && primaryClip.getItemCount() > 0) {
-                    String text = primaryClip.getItemAt(0).getText().toString();
-                    mURLEditText.setText(text);
+                boolean isEmpty = mURLEditText.getText().toString().isEmpty();
+                if (isEmpty) {
+                    String clipboard = getTextFromClipboard();
+                    if (clipboard != null) {
+                        mURLEditText.setText(clipboard);
+                    }
+                } else {
+                    mURLEditText.getText().clear();
+                    screenKeyboardVisibility(mURLEditText, true);
                 }
             }
         });
@@ -146,7 +173,7 @@ public class MainFragment extends Fragment {
                 e.printStackTrace();
             }
         }
-        hideScreenKeyboard(mURLEditText);
+        screenKeyboardVisibility(mURLEditText, false);
         return urls;
     }
 
@@ -171,15 +198,21 @@ public class MainFragment extends Fragment {
     }
 
     /**
-     * Force hide screen keyboard
-     * @param   editText for which hide keyboard
+     * Show or hide screen keyboard.
+     * @param editText for which hide keyboard
+     * @param show show or hide screen keyboard depending on value.
+     *             {@code true} - show, {@code false} - hide.
      */
-    private void hideScreenKeyboard(EditText editText) {
+    private void screenKeyboardVisibility(EditText editText, boolean show) {
         View focusedView = getActivity().getCurrentFocus();
         if (focusedView != null && focusedView instanceof EditText) {
             InputMethodManager inputMethodManager =
                     (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-            inputMethodManager.hideSoftInputFromWindow(editText.getWindowToken(), 0);
+            if (show) {
+                inputMethodManager.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT);
+            } else {
+                inputMethodManager.hideSoftInputFromWindow(editText.getWindowToken(), 0);
+            }
         }
     }
 
@@ -198,6 +231,20 @@ public class MainFragment extends Fragment {
             }
         } else {
             return sharedText;
+        }
+        return null;
+    }
+
+    /**
+     * Get text from clipboard and return value. If clipboard is empty return {@code null}
+     * @return clipboard value
+     */
+    private String getTextFromClipboard() {
+        ClipboardManager clipboardManager =
+                (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
+        ClipData primaryClip = clipboardManager.getPrimaryClip();
+        if (primaryClip != null && primaryClip.getItemCount() > 0) {
+            return primaryClip.getItemAt(0).getText().toString();
         }
         return null;
     }

@@ -6,23 +6,26 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
         <android.support.design.widget.TextInputEditText
             android:id="@+id/short_url_edit_text"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textUri"
             android:imeOptions="actionGo"
-            android:layout_weight="1"
+            android:layout_marginTop="10dp"
+            android:paddingRight="33dp"
             android:hint="@string/enter_short_url"/>
 
-        <Button
-            android:id="@+id/paste_url_button"
+        <ImageButton
+            android:id="@+id/clear_paste_url_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@string/paste"/>
+            android:layout_gravity="bottom"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_marginLeft="-33dp"/>
 
     </LinearLayout>
 

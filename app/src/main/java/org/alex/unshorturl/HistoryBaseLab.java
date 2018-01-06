@@ -81,9 +81,11 @@ public class HistoryBaseLab {
     /**
      * Gets history of URLs which user typed. Returns only URLs with
      * parent_id == 0 and order by DESC.
+     * @param limit get amount of items that equals {@code limit}. If limit == 0
+     *              get all records.
      * @return the list of URLs.
      */
-    public List<HistoryURL> getAllHistory() {
+    public List<HistoryURL> getHistory(long limit) {
         List<HistoryURL> historyList = new ArrayList<>();
 
         String orderBy = HistoryTable.Cols.ID + " DESC";
@@ -94,12 +96,18 @@ public class HistoryBaseLab {
         HistoryDbCursorWrapper cursorWrapper = queryDb(
                 whereClause, whereArgs, orderBy, HistoryTable.NAME);
 
+        long i = 0;
+
         try {
             cursorWrapper.moveToFirst();
             while (!cursorWrapper.isAfterLast()) {
                 HistoryURL historyURL = cursorWrapper.getHistoryURL();
                 historyList.add(historyURL);
                 cursorWrapper.moveToNext();
+                ++i;
+                if (i >= limit && limit != 0) {
+                    break;
+                }
             }
         } finally {
             cursorWrapper.close();
@@ -190,7 +198,7 @@ public class HistoryBaseLab {
 
     /**
      * Deletes record in database with the following id.
-     * @param id of record which needs to delete in database.
+     * @param id of record which needs to be deleted in database.
      */
     public void deleteItem(long id) {
         mDatabase.delete(

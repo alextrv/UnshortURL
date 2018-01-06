@@ -5,8 +5,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.LoginFilter;
-import android.util.Log;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -37,6 +36,26 @@ public class HistoryFragment extends Fragment {
         mRecyclerView = (RecyclerView) view.findViewById(R.id.history_urls_list_recycler_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
+        ItemTouchHelper itemTouchHelper =
+                new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+            @Override
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+                final int position = viewHolder.getAdapterPosition();
+                HistoryURL historyURL = HistoryBaseLab.get(getActivity())
+                        .getHistory(position + 1)
+                        .get(position);
+                HistoryBaseLab.get(getActivity()).deleteItem(historyURL.getId());
+                updateUI();
+            }
+        });
+
+        itemTouchHelper.attachToRecyclerView(mRecyclerView);
+
         updateUI();
 
         return view;
@@ -47,7 +66,7 @@ public class HistoryFragment extends Fragment {
      */
     public void updateUI() {
 
-        List<HistoryURL> historyURLs = HistoryBaseLab.get(getContext()).getAllHistory();
+        List<HistoryURL> historyURLs = HistoryBaseLab.get(getContext()).getHistory(0);
 
         mHistorySize = historyURLs.size();
 

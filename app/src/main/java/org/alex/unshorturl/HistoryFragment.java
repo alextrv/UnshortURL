@@ -2,6 +2,7 @@ package org.alex.unshorturl;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class HistoryFragment extends Fragment {
@@ -21,6 +23,8 @@ public class HistoryFragment extends Fragment {
     private HistoryRecyclerView.ListAdapter mAdapter;
 
     private long mHistorySize;
+
+    private List<HistoryURL> mTempHistoryURLList;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -49,8 +53,22 @@ public class HistoryFragment extends Fragment {
                 HistoryURL historyURL = HistoryBaseLab.get(getActivity())
                         .getHistory(position + 1)
                         .get(position);
-                HistoryBaseLab.get(getActivity()).deleteItem(historyURL.getId());
+                mTempHistoryURLList = new ArrayList<>();
+                mTempHistoryURLList.add(historyURL);
+                mTempHistoryURLList.addAll(
+                        HistoryBaseLab.get(getActivity()).getAllInheritors(historyURL.getId()));
+                HistoryBaseLab.get(getActivity()).deleteItemAndAllInheritors(historyURL.getId());
                 updateUI();
+                Snackbar.make(getView(), R.string.item_deleted, Snackbar.LENGTH_SHORT)
+                        .setAction(R.string.undo, new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                for (HistoryURL item : mTempHistoryURLList) {
+                                    HistoryBaseLab.get(getActivity()).addItem(item);
+                                }
+                                updateUI();
+                            }
+                }).show();
             }
         });
 

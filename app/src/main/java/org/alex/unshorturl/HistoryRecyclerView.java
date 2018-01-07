@@ -1,28 +1,20 @@
 package org.alex.unshorturl;
 
-import android.content.ClipData;
-import android.content.ClipboardManager;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.net.Uri;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * Class implements {@code ViewHolder} and {@code Adapter} for {@code RecyclerView} on history screen
  */
 public class HistoryRecyclerView {
 
-    public static class ListHolder extends RecyclerView.ViewHolder {
+    public static class ListHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private String mShortURL;
         private String mLongURL;
@@ -37,6 +29,8 @@ public class HistoryRecyclerView {
          */
         public ListHolder(View itemView) {
             super(itemView);
+
+            itemView.setOnClickListener(this);
 
             mShortURLTextView = (TextView) itemView.findViewById(R.id.short_history_url);
             mLongURLTextView = (TextView) itemView.findViewById(R.id.long_history_url);
@@ -55,6 +49,11 @@ public class HistoryRecyclerView {
             mShortURLTextView.setText(shortURL);
             mLongURLTextView.setText(longURL);
             mContext = context;
+        }
+
+        @Override
+        public void onClick(View v) {
+            // TODO: show information about clicked link
         }
     }
 
@@ -85,8 +84,13 @@ public class HistoryRecyclerView {
         @Override
         public void onBindViewHolder(ListHolder holder, int position) {
             HistoryURL shortUrl = mURLs.get(position);
-            HistoryURL longURL = HistoryBaseLab.get(mContext).getChildItem(shortUrl.getId());
-            holder.bindValue(shortUrl.getUrl(), longURL.getUrl(), mContext);
+            List<HistoryURL> inheritors = HistoryBaseLab.get(mContext)
+                    .getAllInheritors(shortUrl.getId());
+            HistoryURL lastLongURL = HistoryURL.EMPTY_HISTORY_URL;
+            if (!inheritors.isEmpty()) {
+                lastLongURL = inheritors.get(inheritors.size() - 1);
+            }
+            holder.bindValue(shortUrl.getUrl(), lastLongURL.getUrl(), mContext);
         }
 
         @Override

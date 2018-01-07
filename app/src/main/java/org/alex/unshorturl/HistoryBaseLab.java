@@ -51,6 +51,9 @@ public class HistoryBaseLab {
      */
     private ContentValues getContentValues(HistoryURL historyURL) {
         ContentValues contentValues = new ContentValues();
+        if (historyURL.getId() > 0) {
+            contentValues.put(HistoryTable.Cols.ID, historyURL.getId());
+        }
         contentValues.put(HistoryTable.Cols.URL, historyURL.getUrl());
         contentValues.put(HistoryTable.Cols.PARENT_ID, historyURL.getParentId());
 
@@ -168,6 +171,21 @@ public class HistoryBaseLab {
     }
 
     /**
+     * Get all of inheritors based on {@code parentId}.
+     * @param parentId Id of parent.
+     * @return list of all inheritors.
+     */
+    public List<HistoryURL> getAllInheritors(long parentId) {
+        List<HistoryURL> list = new ArrayList<>();
+        HistoryURL historyURL = getChildItem(parentId);
+        while (historyURL != null) {
+            list.add(historyURL);
+            historyURL = getChildItem(historyURL.getId());
+        }
+        return list;
+    }
+
+    /**
      * Inserts into database @{code historyURL} from params.
      * @param historyURL inserts into DB.
      * @return the row ID of the newly inserted row, or -1 if an error occurred
@@ -206,6 +224,18 @@ public class HistoryBaseLab {
                 HistoryTable.Cols.ID + " = ?",
                 new String[]{ String.valueOf(id) }
         );
+    }
+
+    /**
+     * Deletes {@code parentId} and all of its inheritors.
+     * @param parentId id of record that needs to be deleted in database.
+     */
+    public void deleteItemAndAllInheritors(long parentId) {
+        List<HistoryURL> historyURLS = getAllInheritors(parentId);
+        deleteItem(parentId);
+        for (HistoryURL item : historyURLS) {
+            deleteItem(item.getId());
+        }
     }
 
     /**

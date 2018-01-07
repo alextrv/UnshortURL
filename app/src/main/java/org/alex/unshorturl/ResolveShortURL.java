@@ -1,5 +1,7 @@
 package org.alex.unshorturl;
 
+import android.webkit.URLUtil;
+
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -43,6 +45,9 @@ public class ResolveShortURL {
         if (responseCode == HttpURLConnection.HTTP_MOVED_PERM
                 || responseCode == HttpURLConnection.HTTP_MOVED_TEMP) {
             longUrl = urlConnection.getHeaderField(LOCATION);
+            if (!URLUtil.isHttpUrl(longUrl) && !URLUtil.isHttpsUrl(longUrl)) {
+                longUrl = new URL(url, longUrl).toString();
+            }
         }
 
         return longUrl;

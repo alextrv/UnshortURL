@@ -1,10 +1,10 @@
-package org.alex.unshorturl.database;
+package org.trv.alex.unshorturl.database;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import org.alex.unshorturl.database.HistoryDbSchema.HistoryTable;
+import org.trv.alex.unshorturl.database.HistoryDbSchema.HistoryTable;
 
 public class HistoryDbHelper extends SQLiteOpenHelper {
 

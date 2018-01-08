@@ -1,4 +1,4 @@
-package org.alex.unshorturl;
+package org.trv.alex.unshorturl;
 
 /**
  * Represents data from database from table "history". Instances of

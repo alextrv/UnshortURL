@@ -1,13 +1,13 @@
-package org.alex.unshorturl;
+package org.trv.alex.unshorturl;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import org.alex.unshorturl.database.HistoryDbCursorWrapper;
-import org.alex.unshorturl.database.HistoryDbHelper;
-import org.alex.unshorturl.database.HistoryDbSchema.HistoryTable;
+import org.trv.alex.unshorturl.database.HistoryDbCursorWrapper;
+import org.trv.alex.unshorturl.database.HistoryDbHelper;
+import org.trv.alex.unshorturl.database.HistoryDbSchema.HistoryTable;
 
 import java.util.ArrayList;
 import java.util.List;

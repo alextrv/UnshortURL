@@ -6,14 +6,14 @@
     <string name="copy">Copy</string>
     <string name="paste">Paste</string>
     <string name="open">Open</string>
-    <string name="not_short_url">This is not short URL</string>
+    <string name="not_short_url">This is not a short URL</string>
 
     <string name="main">Main</string>
     <string name="history">History</string>
 
     <string name="enter_short_url">Enter short URL</string>
-    <string name="get_deep_url">Get deep long URL</string>
-    <string name="go">Go</string>
+    <string name="find_recursively">Find recursively</string>
+    <string name="find">Find</string>
 
     <string name="clear_all_history">Clear all history</string>
 

@@ -1,5 +1,6 @@
 package org.trv.alex.unshorturl;
 
+import android.app.Fragment;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -8,8 +9,9 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
-import android.support.v4.app.Fragment;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -20,14 +22,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
-import android.webkit.URLUtil;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MainFragment extends Fragment {
@@ -40,20 +41,36 @@ public class MainFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private MainRecyclerView.ListAdapter mAdapter;
 
+    private List<String> mURLs;
+
+    private static final String SAVED_LIST = "savedList";
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setRetainInstance(true);
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_main, container, false);
 
-        mURLEditText = (TextInputEditText) view.findViewById(R.id.short_url_edit_text);
-        mGetLongURLButton = (Button) view.findViewById(R.id.get_long_url_button);
-        mGetDeepLongURLButton = (Button) view.findViewById(R.id.get_deep_long_url_button);
+        mURLEditText = view.findViewById(R.id.short_url_edit_text);
+        mGetLongURLButton = view.findViewById(R.id.get_long_url_button);
+        mGetDeepLongURLButton = view.findViewById(R.id.get_deep_long_url_button);
 
-        mRecyclerView = (RecyclerView) view.findViewById(R.id.urls_list_recycler_view);
+        mRecyclerView = view.findViewById(R.id.urls_list_recycler_view);
+
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        mClearPasteFromClipboardButton = (ImageButton) view.findViewById(R.id.clear_paste_url_button);
+        DividerItemDecoration dividerItemDecoration =
+                new DividerItemDecoration(mRecyclerView.getContext(), DividerItemDecoration.VERTICAL);
+
+        mRecyclerView.addItemDecoration(dividerItemDecoration);
+
+        mClearPasteFromClipboardButton = view.findViewById(R.id.clear_paste_url_button);
 
         mURLEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -119,9 +136,27 @@ public class MainFragment extends Fragment {
             }
         });
 
-        updateURLsUI(null);
+        if (savedInstanceState != null) {
+            mURLs = savedInstanceState.getStringArrayList(SAVED_LIST);
+        }
+
+        System.out.println(mURLs == null ? "null" : mURLs.size());
+
+        updateURLsUI(mURLs);
 
         return view;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mAdapter = null;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putStringArrayList(SAVED_LIST, (ArrayList<String>) mURLs);
     }
 
     /**
@@ -153,27 +188,23 @@ public class MainFragment extends Fragment {
      * @return  list of long URLs or empty list if url already is long version
      *          {@code null} if something went wrong
      */
-    private List<String> actionGetLongURL(final boolean getDeepURL) {
-        final String url = mURLEditText.getText().toString();
-        List<String> urls = null;
-        if (URLUtil.isHttpUrl(url) || URLUtil.isHttpsUrl(url)) {
-            try {
-                if (getDeepURL) {
-                    urls = ResolveShortURL.getDeepLongURL(url);
-                } else {
-                    urls = ResolveShortURL.getOneLevelLongURL(url);
-                }
-                if (urls != null && urls.size() > 0) {
-                    long parentId = HistoryBaseLab.get(getContext()).addItem(new HistoryURL(0, url, 0));
-                    for (String longUrl : urls) {
-                        parentId = HistoryBaseLab.get(getContext()).addItem(new HistoryURL(0, longUrl, parentId));
-                    }
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
+    private List<String> actionGetLongURL(final boolean getDeepURL, String url) {
+        List<String> urls;
+        try {
+            if (getDeepURL) {
+                urls = ResolveShortURL.getDeepLongURL(url);
+            } else {
+                urls = ResolveShortURL.getOneLevelLongURL(url);
             }
+            if (urls != null && urls.size() > 0) {
+                long parentId = HistoryBaseLab.get(getActivity()).addItem(new HistoryURL(0, url, 0));
+                for (String longUrl : urls) {
+                    parentId = HistoryBaseLab.get(getActivity()).addItem(new HistoryURL(0, longUrl, parentId));
+                }
+            }
+        } catch (IOException e) {
+            urls = null;
         }
-        screenKeyboardVisibility(mURLEditText, false);
         return urls;
     }
 
@@ -182,17 +213,26 @@ public class MainFragment extends Fragment {
      */
     private class AsyncURL extends AsyncTask<Boolean, Void, List<String>> {
 
+        private String url;
+
+        @Override
+        protected void onPreExecute() {
+            url = mURLEditText.getText().toString();
+            screenKeyboardVisibility(mURLEditText, false);
+        }
+
         @Override
         protected List<String> doInBackground(Boolean... params) {
-            return actionGetLongURL(params[0]);
+            return actionGetLongURL(params[0], url);
         }
 
         @Override
         protected void onPostExecute(List<String> result) {
             if (result == null || result.size() == 0) {
-                Toast.makeText(getActivity(), R.string.not_short_url, Toast.LENGTH_SHORT).show();
+                Snackbar.make(getView(), R.string.not_short_url, Snackbar.LENGTH_SHORT).show();
             }
             ((MainActivity) getActivity()).getViewPager().getAdapter().notifyDataSetChanged();
+            mURLs = result;
             updateURLsUI(result);
         }
     }

@@ -21,6 +21,8 @@ public class ResolveShortURL {
     // response Location header
     private static final String LOCATION = "Location";
 
+    private static final String HTTP_SCHEME = "http://";
+
     private ResolveShortURL() {
     }
 
@@ -34,11 +36,17 @@ public class ResolveShortURL {
     private static String getLongURL(String spec) throws IOException {
         String longUrl = null;
 
+        if (!URLUtil.isHttpUrl(spec) && !URLUtil.isHttpsUrl(spec)) {
+            spec = HTTP_SCHEME + spec;
+        }
+
         URL url = new URL(spec);
 
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
         urlConnection.setInstanceFollowRedirects(false);
         urlConnection.setRequestProperty("User-Agent", USER_AGENT);
+        urlConnection.setConnectTimeout(5000);
+        urlConnection.setReadTimeout(5000);
 
         int responseCode = urlConnection.getResponseCode();
 

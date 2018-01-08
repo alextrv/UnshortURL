@@ -39,14 +39,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="@string/go"/>
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:text="@string/find"/>
 
         <Button
             android:id="@+id/get_deep_long_url_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="@string/get_deep_url"/>
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:text="@string/find_recursively"/>
 
     </LinearLayout>
 

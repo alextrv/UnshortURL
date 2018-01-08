@@ -1,18 +1,13 @@
 package org.trv.alex.unshorturl;
 
-import android.content.ClipData;
-import android.content.ClipboardManager;
+import android.app.Activity;
+import android.app.FragmentManager;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.net.Uri;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.List;
 
@@ -37,7 +32,7 @@ public class MainRecyclerView {
 
             itemView.setOnClickListener(this);
 
-            mURLTextView = (TextView) itemView.findViewById(R.id.long_url);
+            mURLTextView = itemView.findViewById(R.id.long_url);
 
         }
 
@@ -54,29 +49,8 @@ public class MainRecyclerView {
 
         @Override
         public void onClick(View v) {
-            new AlertDialog.Builder(mContext)
-                    .setTitle(R.string.long_url)
-                    .setMessage(mURL)
-                    // Button which copy url to clipboard
-                    .setPositiveButton(R.string.copy, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            ClipboardManager clipboardManager =
-                                    (ClipboardManager) mContext.getSystemService(Context.CLIPBOARD_SERVICE);
-                            ClipData clipData = ClipData.newPlainText(null, mURL);
-                            clipboardManager.setPrimaryClip(clipData);
-                            Toast.makeText(mContext, R.string.url_copied, Toast.LENGTH_SHORT).show();
-                        }
-                    })
-                    // Button which open url in browser or any other external app
-                    .setNeutralButton(R.string.open, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(mURL));
-                            mContext.startActivity(browserIntent);
-                        }
-                    })
-                    .create().show();
+            FragmentManager fm = ((Activity) mContext).getFragmentManager();
+            URLInfoDialog.newInstance(mURL).show(fm, "tag");
         }
     }
 

@@ -1,13 +1,19 @@
 package org.trv.alex.unshorturl;
 
+import android.app.Fragment;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
-public class MainActivity extends AppCompatActivity implements CustomDialog.ButtonActionListener {
+public class MainActivity extends AppCompatActivity implements ButtonActionListener {
 
     private Toolbar mToolbar;
     private TabLayout mTabLayout;
@@ -18,14 +24,14 @@ public class MainActivity extends AppCompatActivity implements CustomDialog.Butt
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
 
-        mViewPager = (ViewPager) findViewById(R.id.view_pager);
+        mViewPager = findViewById(R.id.view_pager);
 
         setupViewPager();
 
-        mTabLayout = (TabLayout) findViewById(R.id.tab_layout);
+        mTabLayout = findViewById(R.id.tab_layout);
         mTabLayout.setupWithViewPager(mViewPager);
 
     }
@@ -34,7 +40,7 @@ public class MainActivity extends AppCompatActivity implements CustomDialog.Butt
      * Sets up ViewPager on the main screen and adds fragment for each tab
      */
     private void setupViewPager() {
-        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
+        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getFragmentManager());
         viewPagerAdapter.addFragment(new MainFragment(), getString(R.string.main));
         viewPagerAdapter.addFragment(new HistoryFragment(), getString(R.string.history));
         mViewPager.setAdapter(viewPagerAdapter);
@@ -45,17 +51,34 @@ public class MainActivity extends AppCompatActivity implements CustomDialog.Butt
     }
 
     @Override
-    public void onPositive() {
-        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.view_pager);
-        if (fragment instanceof HistoryFragment) {
+    public void onPositive(Bundle args, DialogType type) {
+        Fragment fragment = getFragmentManager().findFragmentById(R.id.view_pager);
+
+        if (type == DialogType.CLEAR_HISTORY_DIALOG && fragment instanceof HistoryFragment) {
             HistoryBaseLab.get(getApplicationContext()).deleteAllItems();
             ((HistoryFragment) fragment).updateUI();
             invalidateOptionsMenu();
         }
+        if (type == DialogType.URL_INFO_DIALOG) {
+            String url = args.getString(URLInfoDialog.URL_KEY);
+            ClipboardManager clipboardManager =
+                    (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+            ClipData clipData = ClipData.newPlainText(null, url);
+            clipboardManager.setPrimaryClip(clipData);
+            Snackbar.make(findViewById(R.id.coordinator_layout), R.string.url_copied, Snackbar.LENGTH_SHORT).show();
+        }
     }
 
     @Override
-    public void onNegative() {
+    public void onNegative(Bundle args, DialogType type) {
+    }
 
+    @Override
+    public void onNeutral(Bundle args, DialogType type) {
+        if (type == DialogType.URL_INFO_DIALOG) {
+            String url = args.getString(URLInfoDialog.URL_KEY);
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+            startActivity(browserIntent);
+        }
     }
 }

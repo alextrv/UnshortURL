@@ -1,9 +1,9 @@
 package org.trv.alex.unshorturl;
 
+import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
@@ -37,7 +37,7 @@ public class HistoryFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_history, container, false);
 
-        mRecyclerView = (RecyclerView) view.findViewById(R.id.history_urls_list_recycler_view);
+        mRecyclerView = view.findViewById(R.id.history_urls_list_recycler_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         ItemTouchHelper itemTouchHelper =
@@ -84,7 +84,7 @@ public class HistoryFragment extends Fragment {
      */
     public void updateUI() {
 
-        List<HistoryURL> historyURLs = HistoryBaseLab.get(getContext()).getHistory(0);
+        List<HistoryURL> historyURLs = HistoryBaseLab.get(getActivity()).getHistory(0);
 
         mHistorySize = historyURLs.size();
 
@@ -116,7 +116,7 @@ public class HistoryFragment extends Fragment {
         switch (item.getItemId())
         {
             case R.id.action_clear_all_history:
-                new CustomDialog().show(getFragmentManager(), "Tag");
+                new ClearHistoryDialog().show(getFragmentManager(), "Tag");
                 return true;
         }
         return super.onOptionsItemSelected(item);

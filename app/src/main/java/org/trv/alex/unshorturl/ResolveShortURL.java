@@ -36,9 +36,7 @@ public class ResolveShortURL {
     private static String getLongURL(String spec) throws IOException {
         String longUrl = null;
 
-        if (!URLUtil.isHttpUrl(spec) && !URLUtil.isHttpsUrl(spec)) {
-            spec = HTTP_SCHEME + spec;
-        }
+        spec = addHttpScheme(spec);
 
         URL url = new URL(spec);
 
@@ -96,6 +94,13 @@ public class ResolveShortURL {
 
         return listOfUrls;
 
+    }
+
+    public static String addHttpScheme(String spec) {
+        if (!URLUtil.isHttpUrl(spec) && !URLUtil.isHttpsUrl(spec)) {
+            return HTTP_SCHEME + spec;
+        }
+        return spec;
     }
 
 }

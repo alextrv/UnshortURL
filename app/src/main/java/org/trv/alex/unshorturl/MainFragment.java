@@ -140,8 +140,6 @@ public class MainFragment extends Fragment {
             mURLs = savedInstanceState.getStringArrayList(SAVED_LIST);
         }
 
-        System.out.println(mURLs == null ? "null" : mURLs.size());
-
         updateURLsUI(mURLs);
 
         return view;

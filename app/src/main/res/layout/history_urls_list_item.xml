@@ -5,28 +5,27 @@
     android:id="@+id/history_card_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    cardview:cardElevation="2dp"
+    cardview:cardElevation="4dp"
     cardview:cardUseCompatPadding="true"
     cardview:cardPreventCornerOverlap="false"
     cardview:cardCornerRadius="2dp"
     android:foreground="?attr/selectableItemBackground">
 
     <LinearLayout
+        android:id="@+id/layout_info"
         android:padding="5dp"
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
         <TextView
             android:id="@+id/short_history_url"
-            android:layout_width="wrap_content"
+            android:singleLine="true"
+            android:ellipsize="end"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"/>
-
-        <TextView
-            android:id="@+id/long_history_url"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:background="?attr/selectableItemBackground"/>
 
     </LinearLayout>
 

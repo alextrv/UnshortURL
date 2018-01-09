@@ -6,15 +6,13 @@ package org.trv.alex.unshorturl;
  */
 public class HistoryURL {
 
-    public static final HistoryURL EMPTY_HISTORY_URL = new HistoryURL(0, "", 0);
-
     private final long mId;
     private final String mUrl;
     private final long mParentId;
 
     public HistoryURL(long id, String url, long parentId) {
         mId = id;
-        mUrl = url;
+        mUrl = ResolveShortURL.addHttpScheme(url);
         mParentId = parentId;
     }
 
@@ -28,5 +26,10 @@ public class HistoryURL {
 
     public long getParentId() {
         return mParentId;
+    }
+
+    @Override
+    public String toString() {
+        return mUrl;
     }
 }

@@ -1,4 +1,4 @@
-package org.trv.alex.unshorturl;
+package org.trv.alex.unshortenurl;
 
 public enum DialogType {
 

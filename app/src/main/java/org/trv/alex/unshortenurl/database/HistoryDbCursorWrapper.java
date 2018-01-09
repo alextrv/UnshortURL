@@ -1,10 +1,10 @@
-package org.trv.alex.unshorturl.database;
+package org.trv.alex.unshortenurl.database;
 
 import android.database.Cursor;
 import android.database.CursorWrapper;
 
-import org.trv.alex.unshorturl.HistoryURL;
-import org.trv.alex.unshorturl.database.HistoryDbSchema.HistoryTable;
+import org.trv.alex.unshortenurl.HistoryURL;
+import org.trv.alex.unshortenurl.database.HistoryDbSchema.HistoryTable;
 
 public class HistoryDbCursorWrapper extends CursorWrapper {
 

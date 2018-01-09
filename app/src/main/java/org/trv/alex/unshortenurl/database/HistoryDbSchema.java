@@ -1,4 +1,4 @@
-package org.trv.alex.unshorturl.database;
+package org.trv.alex.unshortenurl.database;
 
 /**
  * Database history URLs schema.

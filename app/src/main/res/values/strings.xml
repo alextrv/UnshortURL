@@ -7,6 +7,7 @@
     <string name="paste">Paste</string>
     <string name="open">Open</string>
     <string name="not_short_url">This is not a short URL</string>
+    <string name="no_inet_connection">No Internet connection</string>
 
     <string name="main">Main</string>
     <string name="history">History</string>

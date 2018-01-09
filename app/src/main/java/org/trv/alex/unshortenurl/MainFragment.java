@@ -158,8 +158,8 @@ public class MainFragment extends Fragment {
     }
 
     /**
-     * Set {@code RecyclerView} list from {@code urls} and update it
-     * @param   urls list of resolved (long) URLs
+     * Set {@code RecyclerView} list from {@code urls} and update it.
+     * @param   urls list of resolved (long) URLs.
      */
     private void updateURLsUI(List<String> urls) {
 
@@ -181,10 +181,10 @@ public class MainFragment extends Fragment {
      * Try to get long URL from {@code EditText}. If {@code getDeepURL} is {@code true} then
      * get long URL until it becomes not short and if success return list that may have
      * more than one elements, else if {@code false} then get only one level
-     * and if success return list will have one element
-     * @param   getDeepURL if {@code true} then get deep URL, else not
+     * and if success return list will have one element.
+     * @param   getDeepURL if {@code true} then get deep URL, else not.
      * @return  list of long URLs or empty list if url already is long version
-     *          {@code null} if something went wrong
+     *          {@code null} if something went wrong.
      */
     private List<String> actionGetLongURL(final boolean getDeepURL, String url) {
         List<String> urls;
@@ -202,16 +202,19 @@ public class MainFragment extends Fragment {
             }
         } catch (IOException e) {
             urls = null;
+            if (!ResolveShortURL.isOnline()) {
+            }
         }
         return urls;
     }
 
     /**
-     * Inner AsyncTask class for updating {@code RecyclerView} in background
+     * Inner AsyncTask class for updating {@code RecyclerView} in background.
      */
     private class AsyncURL extends AsyncTask<Boolean, Void, List<String>> {
 
         private String url;
+        private int messageId;
 
         @Override
         protected void onPreExecute() {
@@ -221,13 +224,19 @@ public class MainFragment extends Fragment {
 
         @Override
         protected List<String> doInBackground(Boolean... params) {
-            return actionGetLongURL(params[0], url);
+            if (ResolveShortURL.isOnline()) {
+                messageId = R.string.not_short_url;
+                return actionGetLongURL(params[0], url);
+            } else {
+                messageId = R.string.no_inet_connection;
+                return null;
+            }
         }
 
         @Override
         protected void onPostExecute(List<String> result) {
             if (result == null || result.size() == 0) {
-                Snackbar.make(getView(), R.string.not_short_url, Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(getView(), messageId, Snackbar.LENGTH_SHORT).show();
             }
             ((MainActivity) getActivity()).getViewPager().getAdapter().notifyDataSetChanged();
             mURLs = result;
@@ -256,9 +265,9 @@ public class MainFragment extends Fragment {
 
     /**
      * Get text from intent as StringExtra or as Data. If intent doesn't have any
-     * text then return {@code null}
-     * @param   intent the intent
-     * @return  text from intent or {@code null} if empty
+     * text then return {@code null}.
+     * @param   intent the intent.
+     * @return  text from intent or {@code null} if empty.
      */
     private String getURLFromIntent(Intent intent) {
         String sharedText = intent.getStringExtra(Intent.EXTRA_TEXT);
@@ -274,8 +283,8 @@ public class MainFragment extends Fragment {
     }
 
     /**
-     * Get text from clipboard and return value. If clipboard is empty return {@code null}
-     * @return clipboard value
+     * Get text from clipboard and return value. If clipboard is empty return {@code null}.
+     * @return clipboard value.
      */
     private String getTextFromClipboard() {
         ClipboardManager clipboardManager =

@@ -32,7 +32,7 @@ public class URLInfoDialog extends DialogFragment {
         final Bundle args = getArguments();
 
         return new AlertDialog.Builder(getActivity())
-                .setTitle(R.string.long_url)
+                .setTitle(R.string.url)
                 .setMessage(url)
                 // Button which copy url to clipboard
                 .setPositiveButton(R.string.copy, new DialogInterface.OnClickListener() {

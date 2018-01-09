@@ -1,8 +1,9 @@
 <resources>
-    <string name="app_name">UnshortURL</string>
+    <string name="app_name">UnshortenURL</string>
 
     <string name="url_copied">URL copied to clipboard</string>
     <string name="long_url">Long URL</string>
+    <string name="url">URL</string>
     <string name="copy">Copy</string>
     <string name="paste">Paste</string>
     <string name="open">Open</string>

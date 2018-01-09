@@ -17,7 +17,14 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HistoryFragment extends Fragment {
+public class HistoryFragment extends Fragment implements MainActivity.Callback {
+
+    @Override
+    public void runCallBack() {
+        if (mRecyclerView != null) {
+            mRecyclerView.smoothScrollToPosition(0);
+        }
+    }
 
     private RecyclerView mRecyclerView;
     private HistoryRecyclerView.ListAdapter mAdapter;

@@ -15,6 +15,10 @@ import android.support.v7.widget.Toolbar;
 
 public class MainActivity extends AppCompatActivity implements ButtonActionListener {
 
+    public interface Callback {
+        void runCallBack();
+    }
+
     private Toolbar mToolbar;
     private TabLayout mTabLayout;
     private ViewPager mViewPager;
@@ -32,6 +36,27 @@ public class MainActivity extends AppCompatActivity implements ButtonActionListe
         setupViewPager();
 
         mTabLayout = findViewById(R.id.tab_layout);
+
+        mTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+                if (tab.getPosition() == 1) {
+                    Fragment fragment = getFragmentManager().findFragmentById(R.id.view_pager);
+                    if (fragment instanceof Callback) {
+                        ((Callback) fragment).runCallBack();
+                    }
+                }
+            }
+        });
+
         mTabLayout.setupWithViewPager(mViewPager);
 
     }

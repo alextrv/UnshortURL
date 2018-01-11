@@ -1,0 +1,27 @@
+<resources>
+    <string name="app_name">UnshortenURL</string>
+
+    <string name="url_copied">URL скопирован в буфер обмена</string>
+    <string name="long_url">Расширенный URL</string>
+    <string name="url">URL</string>
+    <string name="copy">Копировать</string>
+    <string name="paste">Вставить</string>
+    <string name="open">Открыть</string>
+    <string name="share">Поделится</string>
+    <string name="not_short_url">Это не короткий URL-адрес</string>
+    <string name="no_inet_connection">Нет соединения с интернетом</string>
+
+    <string name="main">Главная</string>
+    <string name="history">История</string>
+
+    <string name="enter_short_url">Введите короткий URL-адрес</string>
+    <string name="find_recursively">Искать рекурсивно</string>
+    <string name="find">Искать</string>
+
+    <string name="clear_all_history">Очистить историю</string>
+
+    <string name="are_you_sure_clear_history">Вы уверены, что хотите удалить всю историю?</string>
+
+    <string name="undo">Отменить</string>
+    <string name="item_deleted">URL-адрес удален</string>
+</resources>

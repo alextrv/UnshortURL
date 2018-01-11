@@ -27,7 +27,6 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -188,21 +187,15 @@ public class MainFragment extends Fragment {
      */
     private List<String> actionGetLongURL(final boolean getDeepURL, String url) {
         List<String> urls;
-        try {
-            if (getDeepURL) {
-                urls = ResolveShortURL.getDeepLongURL(url);
-            } else {
-                urls = ResolveShortURL.getOneLevelLongURL(url);
-            }
-            if (urls != null && urls.size() > 0) {
-                long parentId = HistoryBaseLab.get(getActivity()).addItem(new HistoryURL(0, url, 0));
-                for (String longUrl : urls) {
-                    parentId = HistoryBaseLab.get(getActivity()).addItem(new HistoryURL(0, longUrl, parentId));
-                }
-            }
-        } catch (IOException e) {
-            urls = null;
-            if (!ResolveShortURL.isOnline()) {
+        if (getDeepURL) {
+            urls = ResolveShortURL.getDeepLongURL(url);
+        } else {
+            urls = ResolveShortURL.getOneLevelLongURL(url);
+        }
+        if (urls != null && urls.size() > 0) {
+            long parentId = HistoryBaseLab.get(getActivity()).addItem(new HistoryURL(0, url, 0));
+            for (String longUrl : urls) {
+                parentId = HistoryBaseLab.get(getActivity()).addItem(new HistoryURL(0, longUrl, parentId));
             }
         }
         return urls;

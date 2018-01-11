@@ -68,12 +68,15 @@ public class ResolveShortURL {
      * @return  the {@code List} with one element or empty if {@code spec} URL is not short.
      * @throws  IOException if URL is incorrect or network connection disconnected.
      */
-    public static List<String> getOneLevelLongURL(String spec) throws IOException {
+    public static List<String> getOneLevelLongURL(String spec) {
         List<String> urls = new ArrayList<>();
         String shortURL;
 
-        if ((shortURL = getLongURL(spec)) != null) {
-            urls.add(shortURL);
+        try {
+            if ((shortURL = getLongURL(spec)) != null) {
+                urls.add(shortURL);
+            }
+        } catch (IOException e) {
         }
 
         return urls;
@@ -85,22 +88,23 @@ public class ResolveShortURL {
      * @param   spec the URL.
      * @return  the {@code List} with one or more elements (all gotten URLs), or
      *          empty if {@code spec} URL is not short.
-     * @throws  IOException if URL is incorrect or network connection disconnected.
      */
-    public static List<String> getDeepLongURL(String spec) throws IOException {
+    public static List<String> getDeepLongURL(String spec) {
         List<String> listOfUrls = new ArrayList<>();
         String urlString = spec;
 
-        while ((urlString = getLongURL(urlString)) != null) {
-            listOfUrls.add(urlString);
+        try {
+            while ((urlString = getLongURL(urlString)) != null) {
+                listOfUrls.add(urlString);
+            }
+        } catch (IOException e) {
         }
 
         return listOfUrls;
-
     }
 
     /**
-     * Adds at the begging of {@code spec} http protocol if it doesn't contain http(s),
+     * Adds at the beginning of {@code spec} http protocol if it doesn't contain http(s),
      * otherwise no changes are made.
      * @param spec the URL.
      * @return @{code spec} with http protocol.

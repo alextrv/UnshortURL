@@ -79,6 +79,8 @@ public class MainActivity extends AppCompatActivity implements ButtonActionListe
             ((HistoryFragment) fragment).updateUI();
             invalidateOptionsMenu();
         }
+
+        // Copy URL to clipboard
         if (type == DialogType.URL_INFO_DIALOG) {
             String url = args.getString(URLInfoDialog.URL_KEY);
             ClipboardManager clipboardManager =
@@ -91,10 +93,19 @@ public class MainActivity extends AppCompatActivity implements ButtonActionListe
 
     @Override
     public void onNegative(Bundle args, DialogType type) {
+        // Share URL to other apps
+        if (type == DialogType.URL_INFO_DIALOG) {
+            String url = args.getString(URLInfoDialog.URL_KEY);
+            Intent intent = new Intent(Intent.ACTION_SEND);
+            intent.putExtra(Intent.EXTRA_TEXT, url);
+            intent.setType("text/plain");
+            startActivity(intent);
+        }
     }
 
     @Override
     public void onNeutral(Bundle args, DialogType type) {
+        // Open URL in another app
         if (type == DialogType.URL_INFO_DIALOG) {
             String url = args.getString(URLInfoDialog.URL_KEY);
             Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));

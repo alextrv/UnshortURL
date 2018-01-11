@@ -11,8 +11,6 @@ public class URLInfoDialog extends DialogFragment {
 
     public static final String URL_KEY = "urlKey";
 
-    public static final int DIALOG_ID = 2;
-
     public static URLInfoDialog newInstance(String url) {
         URLInfoDialog dialog = new URLInfoDialog();
 
@@ -49,6 +47,12 @@ public class URLInfoDialog extends DialogFragment {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         ((ButtonActionListener) getActivity()).onNeutral(args, DialogType.URL_INFO_DIALOG);
+                    }
+                })
+                .setNegativeButton(R.string.share, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        ((ButtonActionListener) getActivity()).onNegative(args, DialogType.URL_INFO_DIALOG);
                     }
                 })
                 .create();

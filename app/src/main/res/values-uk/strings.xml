@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">UnshortenURL</string>
+    <string name="app_name">Unshorten URL</string>
 
     <string name="url_copied">URL зкопійовано у буфер обміну</string>
     <string name="long_url">Розширений URL</string>

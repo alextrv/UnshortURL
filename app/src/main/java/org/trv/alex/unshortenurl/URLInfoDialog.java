@@ -30,10 +30,10 @@ public class URLInfoDialog extends DialogFragment {
         final Bundle args = getArguments();
 
         return new AlertDialog.Builder(getActivity())
-                .setTitle(R.string.url)
+                .setTitle(R.string.url_string)
                 .setMessage(url)
                 // Button which copy url to clipboard
-                .setPositiveButton(R.string.copy, new DialogInterface.OnClickListener() {
+                .setPositiveButton(R.string.copy_string, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 
@@ -43,13 +43,13 @@ public class URLInfoDialog extends DialogFragment {
                     }
                 })
                 // Button which open url in browser or any other external app
-                .setNeutralButton(R.string.open, new DialogInterface.OnClickListener() {
+                .setNeutralButton(R.string.open_string, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         ((ButtonActionListener) getActivity()).onNeutral(args, DialogType.URL_INFO_DIALOG);
                     }
                 })
-                .setNegativeButton(R.string.share, new DialogInterface.OnClickListener() {
+                .setNegativeButton(R.string.share_string, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         ((ButtonActionListener) getActivity()).onNegative(args, DialogType.URL_INFO_DIALOG);

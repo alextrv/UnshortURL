@@ -1,27 +1,27 @@
 <resources>
     <string name="app_name">Unshorten URL</string>
 
-    <string name="url_copied">URL скопирован в буфер обмена</string>
-    <string name="long_url">Расширенный URL</string>
-    <string name="url">URL</string>
-    <string name="copy">Копировать</string>
-    <string name="paste">Вставить</string>
-    <string name="open">Открыть</string>
-    <string name="share">Поделится</string>
-    <string name="not_short_url">Это не короткий URL-адрес</string>
-    <string name="no_inet_connection">Нет соединения с интернетом</string>
+    <string name="url_copied_string">URL скопирован в буфер обмена</string>
+    <string name="long_url_string">Расширенный URL</string>
+    <string name="url_string">URL</string>
+    <string name="copy_string">Копировать</string>
+    <string name="paste_string">Вставить</string>
+    <string name="open_string">Открыть</string>
+    <string name="share_string">Поделится</string>
+    <string name="not_short_url_string">Это не короткий URL-адрес</string>
+    <string name="no_inet_connection_string">Нет соединения с интернетом</string>
 
-    <string name="main">Главная</string>
-    <string name="history">История</string>
+    <string name="main_string">Главная</string>
+    <string name="history_string">История</string>
 
-    <string name="enter_short_url">Введите короткий URL-адрес</string>
-    <string name="find_recursively">Искать рекурсивно</string>
-    <string name="find">Искать</string>
+    <string name="enter_short_url_string">Введите короткий URL-адрес</string>
+    <string name="find_recursively_string">Искать рекурсивно</string>
+    <string name="find_string">Искать</string>
 
-    <string name="clear_all_history">Очистить историю</string>
+    <string name="clear_all_history_string">Очистить историю</string>
 
-    <string name="are_you_sure_clear_history">Вы уверены, что хотите удалить всю историю?</string>
+    <string name="sure_clear_history_string">Вы уверены, что хотите удалить всю историю?</string>
 
-    <string name="undo">Отменить</string>
-    <string name="item_deleted">URL-адрес удален</string>
+    <string name="undo_string">Отменить</string>
+    <string name="item_deleted_string">URL-адрес удален</string>
 </resources>

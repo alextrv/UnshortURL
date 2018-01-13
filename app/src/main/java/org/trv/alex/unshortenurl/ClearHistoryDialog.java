@@ -16,8 +16,8 @@ public class ClearHistoryDialog extends DialogFragment {
         final Bundle args = getArguments();
 
         return new AlertDialog.Builder(getActivity())
-                .setTitle(R.string.clear_all_history)
-                .setMessage(R.string.are_you_sure_clear_history)
+                .setTitle(R.string.clear_all_history_string)
+                .setMessage(R.string.sure_clear_history_string)
                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {

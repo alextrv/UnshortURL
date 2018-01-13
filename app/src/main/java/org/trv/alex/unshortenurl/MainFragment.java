@@ -218,10 +218,10 @@ public class MainFragment extends Fragment {
         @Override
         protected List<String> doInBackground(Boolean... params) {
             if (ResolveShortURL.isOnline()) {
-                messageId = R.string.not_short_url;
+                messageId = R.string.not_short_url_string;
                 return actionGetLongURL(params[0], url);
             } else {
-                messageId = R.string.no_inet_connection;
+                messageId = R.string.no_inet_connection_string;
                 return null;
             }
         }

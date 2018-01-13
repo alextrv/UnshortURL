@@ -1,27 +1,27 @@
 <resources>
     <string name="app_name">Unshorten URL</string>
 
-    <string name="url_copied">URL зкопійовано у буфер обміну</string>
-    <string name="long_url">Розширений URL</string>
-    <string name="url">URL</string>
-    <string name="copy">Копіювати</string>
-    <string name="paste">Вставити</string>
-    <string name="open">Відкрити</string>
-    <string name="share">Поділитись</string>
-    <string name="not_short_url">Це не коротка URL-адреса</string>
-    <string name="no_inet_connection">Немає з\'єднання з інтернетом</string>
+    <string name="url_copied_string">URL зкопійовано у буфер обміну</string>
+    <string name="long_url_string">Розширений URL</string>
+    <string name="url_string">URL</string>
+    <string name="copy_string">Копіювати</string>
+    <string name="paste_string">Вставити</string>
+    <string name="open_string">Відкрити</string>
+    <string name="share_string">Поділитись</string>
+    <string name="not_short_url_string">Це не коротка URL-адреса</string>
+    <string name="no_inet_connection_string">Немає з\'єднання з інтернетом</string>
 
-    <string name="main">Головна</string>
-    <string name="history">Історія</string>
+    <string name="main_string">Головна</string>
+    <string name="history_string">Історія</string>
 
-    <string name="enter_short_url">Введіть коротку URL-адресу</string>
-    <string name="find_recursively">Шукати рекурсивно</string>
-    <string name="find">Шукати</string>
+    <string name="enter_short_url_string">Введіть коротку URL-адресу</string>
+    <string name="find_recursively_string">Шукати рекурсивно</string>
+    <string name="find_string">Шукати</string>
 
-    <string name="clear_all_history">Очистити історію</string>
+    <string name="clear_all_history_string">Очистити історію</string>
 
-    <string name="are_you_sure_clear_history">Ви впевнені, що хочете видалити всю історію?</string>
+    <string name="sure_clear_history_string">Ви впевнені, що хочете видалити всю історію?</string>
 
-    <string name="undo">Скасувати</string>
-    <string name="item_deleted">URL-адресу видалено</string>
+    <string name="undo_string">Скасувати</string>
+    <string name="item_deleted_string">URL-адресу видалено</string>
 </resources>

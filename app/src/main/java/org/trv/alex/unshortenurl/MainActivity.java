@@ -61,8 +61,8 @@ public class MainActivity extends AppCompatActivity implements ButtonActionListe
      */
     private void setupViewPager() {
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getFragmentManager());
-        viewPagerAdapter.addFragment(new MainFragment(), getString(R.string.main));
-        viewPagerAdapter.addFragment(new HistoryFragment(), getString(R.string.history));
+        viewPagerAdapter.addFragment(new MainFragment(), getString(R.string.main_string));
+        viewPagerAdapter.addFragment(new HistoryFragment(), getString(R.string.history_string));
         mViewPager.setAdapter(viewPagerAdapter);
     }
 
@@ -87,7 +87,7 @@ public class MainActivity extends AppCompatActivity implements ButtonActionListe
                     (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
             ClipData clipData = ClipData.newPlainText(null, url);
             clipboardManager.setPrimaryClip(clipData);
-            Snackbar.make(findViewById(R.id.coordinator_layout), R.string.url_copied, Snackbar.LENGTH_SHORT).show();
+            Snackbar.make(findViewById(R.id.coordinator_layout), R.string.url_copied_string, Snackbar.LENGTH_SHORT).show();
         }
     }
 

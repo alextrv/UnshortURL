@@ -18,7 +18,7 @@
             android:imeOptions="actionGo"
             android:layout_marginTop="10dp"
             android:paddingRight="33dp"
-            android:hint="@string/enter_short_url"/>
+            android:hint="@string/enter_short_url_string"/>
 
         <ImageButton
             android:id="@+id/clear_paste_url_button"
@@ -41,7 +41,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             style="@style/Widget.AppCompat.Button.Colored"
-            android:text="@string/find"/>
+            android:text="@string/find_string"/>
 
         <Button
             android:id="@+id/get_deep_long_url_button"
@@ -49,7 +49,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             style="@style/Widget.AppCompat.Button.Colored"
-            android:text="@string/find_recursively"/>
+            android:text="@string/find_recursively_string"/>
 
     </LinearLayout>
 

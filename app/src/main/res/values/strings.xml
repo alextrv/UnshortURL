@@ -1,27 +1,27 @@
 <resources>
     <string name="app_name">Unshorten URL</string>
 
-    <string name="url_copied">URL copied to clipboard</string>
-    <string name="long_url">Long URL</string>
-    <string name="url">URL</string>
-    <string name="copy">Copy</string>
-    <string name="paste">Paste</string>
-    <string name="open">Open</string>
-    <string name="share">Share</string>
-    <string name="not_short_url">This is not a short URL</string>
-    <string name="no_inet_connection">No Internet connection</string>
+    <string name="url_copied_string">URL copied to clipboard</string>
+    <string name="long_url_string">Long URL</string>
+    <string name="url_string">URL</string>
+    <string name="copy_string">Copy</string>
+    <string name="paste_string">Paste</string>
+    <string name="open_string">Open</string>
+    <string name="share_string">Share</string>
+    <string name="not_short_url_string">This is not a short URL</string>
+    <string name="no_inet_connection_string">No Internet connection</string>
 
-    <string name="main">Main</string>
-    <string name="history">History</string>
+    <string name="main_string">Main</string>
+    <string name="history_string">History</string>
 
-    <string name="enter_short_url">Enter short URL</string>
-    <string name="find_recursively">Find recursively</string>
-    <string name="find">Find</string>
+    <string name="enter_short_url_string">Enter short URL</string>
+    <string name="find_recursively_string">Find recursively</string>
+    <string name="find_string">Find</string>
 
-    <string name="clear_all_history">Clear all history</string>
+    <string name="clear_all_history_string">Clear all history</string>
 
-    <string name="are_you_sure_clear_history">Are you sure you want to clear all history?</string>
+    <string name="sure_clear_history_string">Are you sure you want to clear all history?</string>
 
-    <string name="undo">Undo</string>
-    <string name="item_deleted">Item has been deleted</string>
+    <string name="undo_string">Undo</string>
+    <string name="item_deleted_string">Item has been deleted</string>
 </resources>

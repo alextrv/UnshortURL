@@ -67,8 +67,8 @@ public class HistoryFragment extends Fragment implements MainActivity.Callback {
                         HistoryBaseLab.get(getActivity()).getAllInheritors(historyURL.getId()));
                 HistoryBaseLab.get(getActivity()).deleteItemAndAllInheritors(historyURL.getId());
                 updateUI();
-                Snackbar.make(getView(), R.string.item_deleted, Snackbar.LENGTH_SHORT)
-                        .setAction(R.string.undo, new View.OnClickListener() {
+                Snackbar.make(getView(), R.string.item_deleted_string, Snackbar.LENGTH_SHORT)
+                        .setAction(R.string.undo_string, new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
                                 for (HistoryURL item : mTempHistoryURLList) {

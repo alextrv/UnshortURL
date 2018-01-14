@@ -24,4 +24,5 @@
 
     <string name="undo_string">Undo</string>
     <string name="item_deleted_string">Item has been deleted</string>
+    <string name="empty_history_string">History is empty</string>
 </resources>

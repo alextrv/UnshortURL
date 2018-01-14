@@ -24,4 +24,5 @@
 
     <string name="undo_string">Отменить</string>
     <string name="item_deleted_string">URL-адрес удален</string>
+    <string name="empty_history_string">История пустая</string>
 </resources>

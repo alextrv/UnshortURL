@@ -74,10 +74,10 @@ public class MainActivity extends AppCompatActivity implements ButtonActionListe
     public void onPositive(Bundle args, DialogType type) {
         Fragment fragment = getFragmentManager().findFragmentById(R.id.view_pager);
 
+        // Clear all history
         if (type == DialogType.CLEAR_HISTORY_DIALOG && fragment instanceof HistoryFragment) {
             HistoryBaseLab.get(getApplicationContext()).deleteAllItems();
             ((HistoryFragment) fragment).updateUI();
-            invalidateOptionsMenu();
         }
 
         // Copy URL to clipboard

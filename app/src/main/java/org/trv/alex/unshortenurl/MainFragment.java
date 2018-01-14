@@ -25,6 +25,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -40,7 +41,11 @@ public class MainFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private MainRecyclerView.ListAdapter mAdapter;
 
+    private ProgressBar mProgressBar;
+
     private List<String> mURLs;
+
+    private boolean mTaskRunning;
 
     private static final String SAVED_LIST = "savedList";
 
@@ -59,6 +64,10 @@ public class MainFragment extends Fragment {
         mURLEditText = view.findViewById(R.id.short_url_edit_text);
         mGetLongURLButton = view.findViewById(R.id.get_long_url_button);
         mGetDeepLongURLButton = view.findViewById(R.id.get_deep_long_url_button);
+
+        mProgressBar = view.findViewById(R.id.finding_progress);
+
+        mProgressBar.setVisibility(mTaskRunning ? View.VISIBLE : View.GONE);
 
         mRecyclerView = view.findViewById(R.id.urls_list_recycler_view);
 
@@ -213,6 +222,8 @@ public class MainFragment extends Fragment {
         protected void onPreExecute() {
             url = mURLEditText.getText().toString();
             screenKeyboardVisibility(mURLEditText, false);
+            mTaskRunning = true;
+            mProgressBar.setVisibility(View.VISIBLE);
         }
 
         @Override
@@ -229,6 +240,8 @@ public class MainFragment extends Fragment {
         @Override
         protected void onPostExecute(List<String> result) {
             if (getActivity() != null && getView() != null) {
+                mTaskRunning = false;
+                mProgressBar.setVisibility(View.GONE);
                 if (result == null || result.size() == 0) {
                     Snackbar.make(getView(), messageId, Snackbar.LENGTH_SHORT).show();
                 }

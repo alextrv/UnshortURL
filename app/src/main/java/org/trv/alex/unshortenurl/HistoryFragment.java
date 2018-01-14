@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +28,8 @@ public class HistoryFragment extends Fragment implements MainActivity.Callback {
     private RecyclerView mRecyclerView;
     private HistoryRecyclerView.ListAdapter mAdapter;
 
+    private TextView mEmptyHistoryView;
+
     private Button mClearHistoryButton;
 
     private List<HistoryURL> mTempHistoryURLList;
@@ -38,6 +41,8 @@ public class HistoryFragment extends Fragment implements MainActivity.Callback {
 
         mRecyclerView = view.findViewById(R.id.history_urls_list_recycler_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+        mEmptyHistoryView = view.findViewById(R.id.empty_history);
 
         mClearHistoryButton = view.findViewById(R.id.clear_all_history);
 
@@ -94,6 +99,12 @@ public class HistoryFragment extends Fragment implements MainActivity.Callback {
 
         List<HistoryURL> historyURLs = HistoryBaseLab.get(getActivity()).getHistory(0);
 
+        boolean notEmpty = historyURLs.size() > 0;
+
+        mEmptyHistoryView.setVisibility(notEmpty ? View.GONE : View.VISIBLE);
+
+        mClearHistoryButton.setEnabled(notEmpty);
+
         if (mAdapter == null) {
             mAdapter = new HistoryRecyclerView.ListAdapter(getActivity(), historyURLs);
             mRecyclerView.setAdapter(mAdapter);
@@ -101,8 +112,6 @@ public class HistoryFragment extends Fragment implements MainActivity.Callback {
             mAdapter.setURLs(historyURLs);
             mAdapter.notifyDataSetChanged();
         }
-
-        mClearHistoryButton.setEnabled(historyURLs.size() > 0);
 
     }
 

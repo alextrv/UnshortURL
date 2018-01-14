@@ -5,6 +5,14 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent">
 
+    <TextView
+        android:id="@+id/empty_history"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:text="@string/empty_history_string"/>
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/history_urls_list_recycler_view"
         android:layout_width="match_parent"

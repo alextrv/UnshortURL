@@ -1,5 +1,6 @@
 package org.trv.alex.unshortenurl;
 
+import android.net.Uri;
 import android.webkit.URLUtil;
 
 import java.io.IOException;
@@ -17,6 +18,10 @@ import java.util.List;
  * In other case URL considered long.
  */
 public class ResolveShortURL {
+
+    // exception sites constants
+    private static final String VK_HOST = "vk.com";
+    private static final String VK_QUERY_PARAM_NAME = "to";
 
     // request user-agent header
     private static final String USER_AGENT = "Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101 Firefox/52.0";
@@ -42,6 +47,12 @@ public class ResolveShortURL {
         spec = addHttpScheme(spec);
 
         URL url = new URL(spec);
+
+        String exceptionURL = getURLException(url);
+
+        if (exceptionURL != null) {
+            return exceptionURL;
+        }
 
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
         urlConnection.setInstanceFollowRedirects(false);
@@ -131,6 +142,21 @@ public class ResolveShortURL {
         } catch (IOException e) {
             return false;
         }
+    }
+
+    /**
+     * Handles sites which don't use redirect codes 301 and 302. For example, they may use
+     * redirect in JavaScript.
+     * @param url the URL.
+     * @return long URL. If can't find, returns {@code null}.
+     */
+    private static String getURLException(URL url) {
+        if (url.getHost().equals(VK_HOST)) {
+            Uri uri = Uri.parse(url.toString());
+            return uri.getQueryParameter(VK_QUERY_PARAM_NAME);
+        }
+
+        return null;
     }
 
 }

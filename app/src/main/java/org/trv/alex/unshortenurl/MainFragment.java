@@ -228,12 +228,14 @@ public class MainFragment extends Fragment {
 
         @Override
         protected void onPostExecute(List<String> result) {
-            if (result == null || result.size() == 0) {
-                Snackbar.make(getView(), messageId, Snackbar.LENGTH_SHORT).show();
+            if (getActivity() != null && getView() != null) {
+                if (result == null || result.size() == 0) {
+                    Snackbar.make(getView(), messageId, Snackbar.LENGTH_SHORT).show();
+                }
+                ((MainActivity) getActivity()).getViewPager().getAdapter().notifyDataSetChanged();
+                mURLs = result;
+                updateURLsUI(result);
             }
-            ((MainActivity) getActivity()).getViewPager().getAdapter().notifyDataSetChanged();
-            mURLs = result;
-            updateURLsUI(result);
         }
     }
 

@@ -10,6 +10,7 @@
     <string name="share_string">Share</string>
     <string name="not_short_url_string">This is not a short URL</string>
     <string name="no_inet_connection_string">No Internet connection</string>
+    <string name="error_occurred">An error occurred</string>
 
     <string name="main_string">Main</string>
     <string name="history_string">History</string>

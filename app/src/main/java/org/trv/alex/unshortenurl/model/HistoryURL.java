@@ -1,4 +1,6 @@
-package org.trv.alex.unshortenurl;
+package org.trv.alex.unshortenurl.model;
+
+import org.trv.alex.unshortenurl.util.Network;
 
 /**
  * Represents data from database from table "history". Instances of
@@ -12,7 +14,7 @@ public class HistoryURL {
 
     public HistoryURL(long id, String url, long parentId) {
         mId = id;
-        mUrl = ResolveShortURL.addHttpScheme(url);
+        mUrl = Network.addHttpScheme(url);
         mParentId = parentId;
     }
 

@@ -1,15 +1,15 @@
-package org.trv.alex.unshortenurl;
+package org.trv.alex.unshortenurl.ui.view.activity;
 
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.support.v13.app.FragmentPagerAdapter;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ViewPagerAdapter extends FragmentPagerAdapter {
 
-    private final List<FragmentTitleContainer> mContainerList = new ArrayList<>();
+    private List<FragmentTitleContainer> mContainerList = new ArrayList<>();
 
     public ViewPagerAdapter(FragmentManager fm) {
         super(fm);
@@ -30,26 +30,18 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
         return mContainerList.get(position).getTitle();
     }
 
-    @Override
-    public int getItemPosition(Object object) {
-        Fragment fragment = (Fragment) object;
-        if (fragment instanceof HistoryFragment) {
-            ((HistoryFragment) fragment).updateUI();
-        }
-        return super.getItemPosition(object);
-    }
-
     /**
-     * Add fragment and title to {@code mContainerList}.
-     * @param fragment the fragment
-     * @param title the title for fragment
+     * Adds fragment and title to the {@code ViewPagerAdapter}
+     *
+     * @param fragment Tab's Fragment
+     * @param title    Tab's Title
      */
     public void addFragment(Fragment fragment, String title) {
         mContainerList.add(new FragmentTitleContainer(fragment, title));
     }
 
     /**
-     * Inner class container for fragment and its title. This class has
+     * Class container for fragment and its title. This class has
      * constant fields which can't be changed after object created.
      */
     private static class FragmentTitleContainer {

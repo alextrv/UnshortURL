@@ -3,7 +3,8 @@
               android:orientation="vertical"
               android:background="#eee"
               android:layout_width="match_parent"
-              android:layout_height="match_parent">
+              android:layout_height="match_parent"
+              android:id="@+id/fragmentHistory">
 
     <TextView
         android:id="@+id/empty_history"
@@ -39,5 +40,12 @@
             style="@style/Widget.AppCompat.Button.Borderless.Colored"/>
 
     </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/update_data_progress"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:visibility="gone"/>
 
 </LinearLayout>

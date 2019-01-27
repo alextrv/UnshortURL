@@ -10,6 +10,7 @@
     <string name="share_string">Поделится</string>
     <string name="not_short_url_string">Это не короткий URL-адрес</string>
     <string name="no_inet_connection_string">Нет соединения с интернетом</string>
+    <string name="error_occurred">Произошла ошибка</string>
 
     <string name="main_string">Главная</string>
     <string name="history_string">История</string>

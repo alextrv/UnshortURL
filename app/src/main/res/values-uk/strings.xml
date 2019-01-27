@@ -10,6 +10,7 @@
     <string name="share_string">Поділитись</string>
     <string name="not_short_url_string">Це не коротка URL-адреса</string>
     <string name="no_inet_connection_string">Немає з\'єднання з інтернетом</string>
+    <string name="error_occurred">Сталася помилка</string>
 
     <string name="main_string">Головна</string>
     <string name="history_string">Історія</string>

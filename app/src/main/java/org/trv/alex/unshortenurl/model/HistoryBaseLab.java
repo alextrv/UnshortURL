@@ -1,4 +1,4 @@
-package org.trv.alex.unshortenurl;
+package org.trv.alex.unshortenurl.model;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -11,6 +11,7 @@ import org.trv.alex.unshortenurl.database.HistoryDbSchema.HistoryTable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Class for work with history table from database. Allows to get, add, update,
@@ -19,12 +20,13 @@ import java.util.List;
  */
 public class HistoryBaseLab {
 
-    private SQLiteDatabase mDatabase;
+    private final SQLiteDatabase mDatabase;
 
     private static HistoryBaseLab sHistoryBaseLab;
 
     /**
      * Private constructor. Gets database.
+     *
      * @param context the Context.
      */
     private HistoryBaseLab(Context context) {
@@ -34,18 +36,20 @@ public class HistoryBaseLab {
     /**
      * Gets instance of this class. This method must calls first and then
      * other methods on instance which this method returns.
+     *
      * @param context the Context.
      * @return instance of HistoryBaseLab.
      */
     public static HistoryBaseLab get(Context context) {
         if (sHistoryBaseLab == null) {
-            sHistoryBaseLab = new HistoryBaseLab(context);
+            sHistoryBaseLab = new HistoryBaseLab(context.getApplicationContext());
         }
         return sHistoryBaseLab;
     }
 
     /**
      * Helper that packs {@code HistoryURL} into {@code ContentValues}.
+     *
      * @param historyURL the HistoryURL.
      * @return the ContentValues.
      */
@@ -62,13 +66,16 @@ public class HistoryBaseLab {
 
     /**
      * Helper method that does query to database.
-     * @param whereClause the whereClause.
-     * @param whereArgs the WhereArgs.
-     * @param orderBy the orderBy.
-     * @param tableName the tableName.
+     *
+     * @param whereClause the Where Clause.
+     * @param whereArgs   the Where Args.
+     * @param orderBy     the orderBy.
+     * @param tableName   the table name.
+     * @param limitClause the Limit Clause.
      * @return CursorWrapper for history table.
      */
-    private HistoryDbCursorWrapper queryDb(String whereClause, String[] whereArgs, String orderBy, String tableName) {
+    private HistoryDbCursorWrapper queryDb(String whereClause, String[] whereArgs,
+                                           String orderBy, String tableName, String limitClause) {
         Cursor cursor = mDatabase.query(
                 tableName,
                 null,
@@ -76,7 +83,9 @@ public class HistoryBaseLab {
                 whereArgs,
                 null,
                 null,
-                orderBy);
+                orderBy,
+                limitClause
+        );
 
         return new HistoryDbCursorWrapper(cursor);
     }
@@ -84,36 +93,41 @@ public class HistoryBaseLab {
     /**
      * Gets history of URLs which user typed. Returns only URLs with
      * parent_id == 0 and order by DESC.
-     * @param limit get amount of items that equals {@code limit}. If limit == 0
-     *              get all records.
+     *
+     * @param offset the number of rows that will be skipped from the start.
+     * @param count  number of items that less or equals {@code count}. If count == 0
+     *               gets all records.
      * @return the list of URLs.
      */
-    public List<HistoryURL> getHistory(long limit) {
+    public List<HistoryURL> getHistoryWithNoParentId(long offset, long count) {
+
+        if (offset < 0 || count < 0) {
+            throw new IllegalArgumentException(String.format(Locale.getDefault(),
+                    "offset and count must be >= 0. Actual offset: %d, count: %d", offset, count));
+        }
+
         List<HistoryURL> historyList = new ArrayList<>();
 
         String orderBy = HistoryTable.Cols.ID + " DESC";
 
         String whereClause = HistoryTable.Cols.PARENT_ID + " = ?";
-        String[] whereArgs = new String[] { "0" };
+        String[] whereArgs = new String[]{"0"};
 
-        HistoryDbCursorWrapper cursorWrapper = queryDb(
-                whereClause, whereArgs, orderBy, HistoryTable.NAME);
+        String limitClause;
+        if (count > 0) {
+            limitClause = offset + "," + count;
+        } else {
+            limitClause = offset + "," + Long.MAX_VALUE;
+        }
 
-        long i = 0;
-
-        try {
+        try (HistoryDbCursorWrapper cursorWrapper = queryDb(
+                whereClause, whereArgs, orderBy, HistoryTable.NAME, limitClause)) {
             cursorWrapper.moveToFirst();
             while (!cursorWrapper.isAfterLast()) {
                 HistoryURL historyURL = cursorWrapper.getHistoryURL();
                 historyList.add(historyURL);
                 cursorWrapper.moveToNext();
-                ++i;
-                if (i >= limit && limit != 0) {
-                    break;
-                }
             }
-        } finally {
-            cursorWrapper.close();
         }
 
         return historyList;
@@ -122,71 +136,71 @@ public class HistoryBaseLab {
 
     /**
      * Gets {@code HistoryURL} item from database according to {@code id} params.
+     *
      * @param id the row id in database.
      * @return {@code HistoryURL} item from database or {@code null} if not found.
      */
-    public HistoryURL getItem(long id) {
-        HistoryDbCursorWrapper cursorWrapper = queryDb(
-                HistoryTable.Cols.ID + " = ?",
-                new String[]{ String.valueOf(id) },
-                null,
-                HistoryTable.NAME
-        );
+    public HistoryURL getItemById(long id) {
 
-        try {
+        try (HistoryDbCursorWrapper cursorWrapper = queryDb(
+                HistoryTable.Cols.ID + " = ?",
+                new String[]{String.valueOf(id)},
+                null,
+                HistoryTable.NAME,
+                null
+        )) {
             if (cursorWrapper.getCount() == 0) {
                 return null;
             }
             cursorWrapper.moveToFirst();
             return cursorWrapper.getHistoryURL();
-        } finally {
-            cursorWrapper.close();
         }
 
     }
 
     /**
      * Gets {@code HistoryURL} item from database according to {@code parentId} params.
+     *
      * @param parentId the parent_id in database.
      * @return {@code HistoryURL} item from database or {@code null} if not found.
      */
-    public HistoryURL getChildItem(long parentId) {
-        HistoryDbCursorWrapper cursorWrapper = queryDb(
-                HistoryTable.Cols.PARENT_ID + " = ?",
-                new String[]{ String.valueOf(parentId) },
-                null,
-                HistoryTable.NAME
-        );
+    public HistoryURL getItemByParentId(long parentId) {
 
-        try {
+        try (HistoryDbCursorWrapper cursorWrapper = queryDb(
+                HistoryTable.Cols.PARENT_ID + " = ?",
+                new String[]{String.valueOf(parentId)},
+                null,
+                HistoryTable.NAME,
+                null
+        )) {
             if (cursorWrapper.getCount() == 0) {
                 return null;
             }
             cursorWrapper.moveToFirst();
             return cursorWrapper.getHistoryURL();
-        } finally {
-            cursorWrapper.close();
         }
 
     }
 
     /**
-     * Get all of inheritors based on {@code parentId}.
+     * Gets all of inheritors based on {@code parentId}.
+     *
      * @param parentId Id of parent.
      * @return list of all inheritors.
      */
     public List<HistoryURL> getAllInheritors(long parentId) {
         List<HistoryURL> list = new ArrayList<>();
-        HistoryURL historyURL = getChildItem(parentId);
+        HistoryURL historyURL = getItemByParentId(parentId);
         while (historyURL != null) {
             list.add(historyURL);
-            historyURL = getChildItem(historyURL.getId());
+            historyURL = getItemByParentId(historyURL.getId());
         }
         return list;
     }
 
     /**
      * Inserts into database @{code historyURL} from params.
+     *
      * @param historyURL inserts into DB.
      * @return the row ID of the newly inserted row, or -1 if an error occurred
      */
@@ -198,9 +212,10 @@ public class HistoryBaseLab {
     /**
      * Updates record in database. All data gets from {@code historyURL}
      * and overwrite record in database where _id == {@code historyURL.getId()}.
-     * According to that it's better to get record via {@code getItem()}
+     * According to that it's better to get record via {@code getItemById()}
      * method, create new instance with same _id and edited data, and then
      * put as a parameter to {@code updateItem()}.
+     *
      * @param historyURL edited record
      */
     public void updateItem(HistoryURL historyURL) {
@@ -210,24 +225,26 @@ public class HistoryBaseLab {
                 HistoryTable.NAME,
                 contentValues,
                 HistoryTable.Cols.ID + " = ?",
-                new String[]{ String.valueOf(historyURL.getId()) }
+                new String[]{String.valueOf(historyURL.getId())}
         );
     }
 
     /**
      * Deletes record in database with the following id.
+     *
      * @param id of record which needs to be deleted in database.
      */
     public void deleteItem(long id) {
         mDatabase.delete(
                 HistoryTable.NAME,
                 HistoryTable.Cols.ID + " = ?",
-                new String[]{ String.valueOf(id) }
+                new String[]{String.valueOf(id)}
         );
     }
 
     /**
      * Deletes {@code parentId} and all of its inheritors.
+     *
      * @param parentId id of record that needs to be deleted in database.
      */
     public void deleteItemAndAllInheritors(long parentId) {
